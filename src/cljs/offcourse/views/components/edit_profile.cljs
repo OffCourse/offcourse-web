@@ -19,19 +19,20 @@
   (swap! dropdown-atom #(str dropdown-name)))
 
 (rum/defc form-field [interest update-interest]
-  [:input.form--field {:data-field-type :half
+  [:input.form--field {:key interest
+                       :data-field-type :half
                        :placeholder "Interest"
                        :value interest}])
 
 (rum/defc form-social [user provider update-provider]
-  [:.card--row {:data-row-padded :small}
+  [:.card--row {:key provider
+                :data-row-padded :small}
     (button {:button-text (button-title (name provider))
              :button-color provider}
             #(log/log "Login with Linkedin"))
     [:.card--title {:data-title-disabled (if (get user :linkedin) false true)
                     :data-title-indent true}
       (or (:linkedin user)) (str "Add your " (button-title (name provider)) " account")]])
-
 
 (rum/defcs edit-profile < (rum/local {} ::user)
                           (rum/local "" ::dropdown)
@@ -46,35 +47,34 @@
       [:.card--section
         [:.card--row {:data-row-spaced true}
           [:h1.card--title {:data-title-indent true} "Edit your Profile"]
-          [:.card--link {:data-link-type :strong} "View Profile"]]]
-      [:.card--section {:key :user-name}
-        [:p.card--text {:data-text-indent true} "How would like like to be called"]
+          [:.card--link {:on-click #(respond [:switch-to :view-profile])} "View Profile"]]]
+
+      [:.card--section
+        [:.card--row {:data-row-padded :small}
+          [:p.card--subtitle {:data-subtitle-indent true} "How would like like to be called"]]
         [:input.form--field {:placeholder "Username"
                              :value (:user-name user)
                              :auto-focus true
                              :on-change #(update-prop :user-name % user-atom)
                              :data-field-margin true}]
-        [:p.card--text {:data-text-indent true} "Where can we reach you"]
+        [:.card--row {:data-row-padded :small}
+          [:p.card--subtitle {:data-subtitle-indent true} "Where can we reach you"]]
         [:input.form--field {:placeholder "E-mail"
                              :value (:email user)
                              :on-change #(update-prop :email % user-atom)}]]
 
       [:.card--section
-        [:p.card--text {:data-text-indent true
-                        :data-text-padded :small}
-                       "What would you like to learn"]
+        [:.card--row {:data-row-padded :small}
+          [:p.card--subtitle {:data-subtitle-indent true}
+                             "What would you like to learn"]]
         [:.card--row {:data-row-wrap true}
-          (map #(rum/with-key (form-field % (fn [] ()) %) (:interests user)))
-          (button {:button-text "Add Interest"
-                   :button-color "light"
-                   :button-width "full"}
-                  #())]]
+          (map #(rum/with-key (form-field % (fn [] ()) %) %) ["Phyton" "Database" "HTML" "CSS" "CLJS"])]]
 
       [:.card--section
         [:.card--row {:data-row-spaced true
                       :data-row-padded :large}
-          [:p.card--text {:data-text-indent true}
-                         "Add your accounts"]
+          [:p.card--subtitle {:data-subtitle-indent true}
+                             "Add your accounts"]
           [:.card--link {:data-link-type :em
                          :on-click #(set-dropdown "data" dropdown-atom)}
                         "What Offcourse will do with your accounts"]
@@ -83,15 +83,16 @@
                      :shown (= dropdown? "data")})]
         (map #(rum/with-key (form-social user % (fn [] ())) %) [:github :twitter :linkedin])]
 
-
       [:.card--section
-        [:p.card--text {:data-text-indent true} "Some cool information about you"]
+        [:.card--row {:data-row-padded :small}
+          [:p.card--subtitle {:data-subtitle-indent true} "Some cool information about you"]]
         [:input.form--field {:placeholder "Information"
                              :value (:description user)
                              :on-change #(update-prop :description % user-atom)}]]
 
       [:.card--section
-        [:p.card--text {:data-text-indent true} "What place can we visit to get to know you better"]
+        [:.card--row {:data-row-padded :small}
+          [:p.card--subtitle {:data-subtitle-indent true} "What place can we visit to get to know you better"]]
         [:input.form--field {:placeholder "Website URL"
                              :value (:website user)
                              :on-change #(update-prop :website % user-atom)}]]
@@ -99,8 +100,8 @@
       (when true ;valid?
         [:.card--section
           [:.card--row {:data-row-spaced true}
-            (button {:button-text "Save Changes"}
-                    #(log/log "Update user"))
             (button {:button-text "Cancel"
                      :button-color "red"}
-                    #(log/log "Close"))]])]))
+                    #(respond [:switch-to :view-mode]))
+            (button {:button-text "Save Changes"}
+                    #(log/log "Update user"))]])]))

@@ -17,5 +17,5 @@
                                  (with-meta {:spec :offcourse/new-course})))))
    :main            (fnk [new-course respond]
                          (if new-course
-                           (overlay (course-form {:course new-course} respond))
+                           (course-form {:course new-course} respond)
                            "You are not logged in"))})

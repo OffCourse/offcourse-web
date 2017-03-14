@@ -23,10 +23,16 @@
     (case list-type
       :todo (map #(rum/with-key (todo-list-item % trackable? respond) (:checkpoint-id %)) checkpoints))])
 
-(rum/defc edit-list-item [checkpoint update-handler remove-handler]
+
+
+(rum/defc edit-list-item < {:did-mount (fn [state]
+                                           (let [checkpoint (rum/ref-node state "checkpoint-title")]
+                                             (.focus checkpoint)))}
+                           [checkpoint update-handler remove-handler create-handler]
   [:li.list--item
-    [:.list--item-section
-      [:input.list--course {:type        :text
+    [:.list--item-section {:on-focus #(create-handler)}
+      [:input.list--course {:ref         "checkpoint-title" ;(str "checkpoint-title-" (or (:checkpoint-id checkpoint) "no-id--"))
+                            :type        :text
                             :placeholder "Task Name"
                             :value        (or (:task checkpoint) "")
                             :on-change   (fn [event]
@@ -41,10 +47,12 @@
                                                  checkpoint (assoc-in checkpoint [:resource-url] prop-value)]
                                              (update-handler checkpoint)))}]]
     [:.list--item-section
-      [:button.button {:key :add-button
+      [:button.button {:key :remove-button
                        :data-button-type (name :icon)
-                       :on-click #(remove-handler checkpoint)} "x"]]])
+                       :on-click #(remove-handler checkpoint)}
+       [:img.button--icon {:src "/images/x.svg"}]]]])
 
-(rum/defc edit-list [checkpoints update-handler remove-handler]
+(rum/defc edit-list [checkpoints update-handler remove-handler create-handler]
   [:ul.list {:data-list-type :edit}
-    (map #(rum/with-key (edit-list-item % update-handler remove-handler) (:checkpoint-id %)) checkpoints)])
+    (map #(rum/with-key (edit-list-item % update-handler remove-handler (fn [])) (:checkpoint-id %)) checkpoints)
+    (edit-list-item {} #() #() create-handler)])

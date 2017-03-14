@@ -1,7 +1,7 @@
 (ns offcourse.views.components.course-form
   (:require [rum.core :as rum]
             [offcourse.views.components.button :refer [button]]
-            [offcourse.views.components.item-list :refer [edit-list]]
+            [offcourse.views.components.item-list :refer [edit-list edit-list-item]]
             [offcourse.views.components.dropdown :refer [dropdown]]
             [shared.protocols.specced :as sp]
             [shared.protocols.loggable :as log]
@@ -42,7 +42,7 @@
         [:h1.card--title {:data-title-indent true} "Save a course"]]
       [:.card--section
         [:.card--row {:data-row-spaced true
-                      :data-row-padded :small}
+                      :data-row-padded :large}
           [:p.card--subtitle {:data-subtitle-indent true}
                              "Goal of the course"]
           [:p.card--link {:data-link-type :em
@@ -71,12 +71,16 @@
                      :shown (= dropdown? "resources")})]
         (edit-list (:checkpoints course)
                    #(update-checkpoint course-atom course %1)
-                   #(remove-checkpoint course-atom course %1))
-        (when true
-          (button {:button-text "+" :button-color :light :button-width :full}
-                  #(create-checkpoint course-atom course)))]
+                   #(remove-checkpoint course-atom course %1)
+                   #(create-checkpoint course-atom course))]
      [:.card--section
        [:.card--row {:data-row-spaced true}
+         [(when true
+           (button {:button-text "Cancel"
+                    :button-color "red"}
+                   #(do
+                     (respond [:switch-to :view-mode])
+                     (respond [:go :home]))))]
          [:.card--row
            (when (and valid? dirty?)
              (button {:button-text "Save Course"}
@@ -84,8 +88,4 @@
            (when false
              (button {:button-text "Publish Course"
                       :button-color "blue"}
-                     #(respond [:update course])))]
-         [(when true
-           (button {:button-text "Cancel"
-                    :button-color "red"}
-                   #(respond [:switch-to :view-mode])))]]]]))
+                     #(respond [:update course])))]]]]))

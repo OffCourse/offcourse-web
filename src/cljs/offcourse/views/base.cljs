@@ -15,8 +15,6 @@
             [shared.protocols.loggable :as log]
             [shared.protocols.specced :as sp]))
 
-; It's derived state, but I might think that's not terrible in this case, because it should be standalone too.
-; When the error is gone, the message should not nessecairly be gone too
 (def notification {:title "Thank you for signing up!"
                    :link  "You can edit your profile here"
                    :color "yellow"})
@@ -49,6 +47,6 @@
                          :curate-mode (overlay (course-form nil respond) respond)})
    :overlays       (fnk [base-overlays view-overlays]
                         (merge base-overlays view-overlays))
-   :overlay        (fnk [app-mode overlays]
+   :overlay        (fnk [app-mode overlays user respond]
                         (when-let [overlay (get overlays app-mode)]
                           overlay))})

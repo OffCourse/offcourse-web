@@ -1,12 +1,12 @@
 (ns offcourse.views.containers.app
   (:require[rum.core :as rum]))
 
-(rum/defc app [{:keys [main menubar notifybar dashboard overlay]}]
+(rum/defc app [{:keys [main menubar flash dashboard overlay]}]
   [:.layout
     [:.layout--header
       [:.header
         [:.header--section menubar]
-        (when notifybar [:.header--section notifybar])]]
+        (when flash [:.header--section flash])]]
     [:.layout--main
       [:.main
         (when dashboard [:.main--section dashboard])
