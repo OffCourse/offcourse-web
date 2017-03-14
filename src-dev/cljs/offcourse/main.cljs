@@ -25,7 +25,7 @@
   [{:adapter    aws/create
     :name      "aws-query"
     :resources #{:collection :course :resource}
-    :endpoint  "https://akd5yk8kih.execute-api.us-east-1.amazonaws.com/dev/query"}])
+    :endpoint  "https://k519pksj55.execute-api.us-east-1.amazonaws.com/development/query"}])
 
 (def adapters
   {:auth auth-adapter
