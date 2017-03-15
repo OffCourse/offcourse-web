@@ -9,9 +9,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defn handle-response [{:keys [statusCode body] :as payload}]
-  (condp = statusCode
-    202 {:accepted body}
-    {:denied payload}))
+  {:accepted payload})
 
 (defn handle-error [{:keys [status response] :as payload}]
   {:denied true})

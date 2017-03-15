@@ -13,7 +13,7 @@
   [:ul.actions-panel
     [:.actions-panel--item
       ; (handler-button "EP" #(respond [:switch-to :edit-profile]))
-      [:.action-panel--search-container
+      #_[:.action-panel--search-container
         [:input.actions-panel--search {:placeholder "Enter your search"}]
         [:a.actions-panel--search-btn "Search"]]]
    (if credentials
@@ -22,4 +22,4 @@
                               "Create Course"]]
      (handler-button "Sign In" #(respond [:switch-to :auth])))
    (when credentials
-     (handler-button (str "Hi " user-name) (partial respond [:sign-out])))])
+     (handler-button user-name (partial respond [:sign-out])))])
