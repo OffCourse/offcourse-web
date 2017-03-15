@@ -19,7 +19,7 @@
 (def command-adapter
   {:adapter    aws/create
    :name      "aws-command"
-   :endpoint  "https://akd5yk8kih.execute-api.us-east-1.amazonaws.com/dev/command"})
+   :endpoint  "https://k519pksj55.execute-api.us-east-1.amazonaws.com/development/command"})
 
 (def query-adapters
   [{:adapter    aws/create
