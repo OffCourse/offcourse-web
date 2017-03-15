@@ -3,12 +3,14 @@
             [offcourse.views.components.card-meta :refer [card-meta]]
             [offcourse.views.components.item-list :refer [item-list]]
             [offcourse.views.components.card-social :refer [card-social]]
-            [rum.core :as rum]))
+            [rum.core :as rum]
+            [shared.protocols.loggable :as log]))
 
-(rum/defc card [{:keys [course-id goal course-slug checkpoints curator] :as course}
+(rum/defc card [{:keys [course-id goal course-slug checkpoints tags curator] :as course}
                 respond]
  (let [{:keys [affordances course-url]} (meta course)
        {:keys [browsable? forkable? trackable? editable?]} affordances]
+   (log/log "X" tags)
   [:.container
    [:.card {:on-click #()}
     [:.card--section
